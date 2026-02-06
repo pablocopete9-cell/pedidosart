@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registro de Pedidos - Art & Bath</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2C3E50 0%, #3498DB 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .form-content {
+            padding: 25px 20px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 6px;
+        }
+        
+        .form-group label .required {
+            color: #e74c3c;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498DB;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .pallets-container {
+            margin-top: 20px;
+        }
+        
+        .pallet-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .pallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .pallet-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2C3E50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:active {
+            transform: scale(0.95);
+            background: #c0392b;
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .pallet-card input {
+            padding: 10px 12px;
+            font-size: 15px;
+        }
+        
+        .volumetrico-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        
+        .volumetrico-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6c757d;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .volumetrico-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .volumetrico-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .agencia-name {
+            font-weight: 600;
+            color: #2C3E50;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .agencia-coef {
+            font-size: 11px;
+            color: #6c757d;
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .volumetrico-value {
+            font-weight: 700;
+            color: #3498DB;
+        }
+        
+        .mejor-opcion {
+            background: #d4edda !important;
+            border: 2px solid #28a745;
+        }
+        
+        .mejor-opcion .volumetrico-value {
+            color: #28a745;
+        }
+        
+        .add-pallet-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            border: 2px dashed #3498DB;
+            border-radius: 12px;
+            color: #3498DB;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .add-pallet-btn:active {
+            transform: scale(0.98);
+            background: #e3f2fd;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .summary h3 {
+            font-size: 16px;
+            color: #2C3E50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .summary-item strong {
+            color: #2C3E50;
+        }
+        
+        .summary-agencias {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-agencia {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .summary-agencia:last-child {
+            margin-bottom: 0;
+        }
+        
+        .summary-agencia.mejor {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        
+        .summary-agencia-name {
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .summary-agencia-vol {
+            font-weight: 700;
+            color: #3498DB;
+        }
+        
+        .summary-agencia.mejor .summary-agencia-vol {
+            color: #28a745;
+        }
+        
+        .summary-total {
+            border-top: 2px solid #dee2e6;
+            margin-top: 10px;
+            padding-top: 10px;
+            font-size: 14px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #3498DB 0%, #2C3E50 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .success-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            text-align: center;
+            animation: popIn 0.3s ease-out;
+        }
+        
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        
+        .success-content h2 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        .success-content p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .close-btn {
+            padding: 12px 30px;
+            background: #3498DB;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            color: #0d47a1;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .form-content {
+                padding: 20px 15px;
+            }
+            
+            .pallet-card {
+                padding: 15px;
+            }
+            
+            .row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 Art & Bath</h1>
+            <p>Sistema de Registro de Envíos</p>
+        </div>
+        
+        <div class="form-content">
+            <form id="pedidoForm">
+                <!-- Info sobre agencias -->
+                <div class="info-box">
+                    ℹ️ <strong>Sistema dual de cálculo:</strong> El volumétrico se calcula con ambas agencias (TXT: 220 | Schenker: 225) para cotizar y elegir la mejor opción automáticamente.
+                </div>
+                
+                <!-- Datos del Pedido -->
+                <div class="section">
+                    <div class="section-title">📋 Datos del Pedido</div>
+                    
+                    <div class="form-group">
+                        <label for="numeroPedido">Número de Pedido <span class="required">*</span></label>
+                        <input type="text" id="numeroPedido" placeholder="Ej: P-2024-0850" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="destino">Ciudad de destino <span class="required">*</span></label>
+                        <select id="destino" required>
+                            <option value="">-- Selecciona --</option>
+                            <option value="Madrid">Madrid</option>
+                            <option value="Barcelona">Barcelona</option>
+                            <option value="Valencia">Valencia</option>
+                            <option value="Sevilla">Sevilla</option>
+                            <option value="Zaragoza">Zaragoza</option>
+                            <option value="Málaga">Málaga</option>
+                            <option value="Murcia">Murcia</option>
+                            <option value="Palma de Mallorca">Palma de Mallorca</option>
+                            <option value="Las Palmas">Las Palmas de Gran Canaria</option>
+                            <option value="Bilbao">Bilbao</option>
+                            <option value="Alicante">Alicante</option>
+                            <option value="Córdoba">Córdoba</option>
+                            <option value="Valladolid">Valladolid</option>
+                            <option value="Vigo">Vigo</option>
+                            <option value="Gijón">Gijón</option>
+                            <option value="A Coruña">A Coruña</option>
+                            <option value="Granada">Granada</option>
+                            <option value="Vitoria">Vitoria</option>
+                            <option value="Elche">Elche</option>
+                            <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Pallets -->
+                <div class="section">
+                    <div class="section-title">📦 Pallets del Pedido</div>
+                    
+                    <div class="alert">
+                        💡 <strong>Tip:</strong> Añade todos los grupos de pallets con medidas diferentes. El sistema calculará el volumétrico con ambas agencias automáticamente.
+                    </div>
+                    
+                    <div id="palletsContainer" class="pallets-container">
+                        <!-- Los pallets se añaden aquí dinámicamente -->
+                    </div>
+                    
+                    <button type="button" class="add-pallet-btn" onclick="addPallet()">
+                        ➕ Añadir Grupo de Pallets
+                    </button>
+                </div>
+                
+                <!-- Resumen -->
+                <div class="summary" id="summary" style="display: none;">
+                    <h3>📊 Resumen del Pedido</h3>
+                    <div class="summary-item">
+                        <span>Total de pallets:</span>
+                        <strong id="totalPallets">0</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Grupos de medidas:</span>
+                        <strong id="totalGrupos">0</strong>
+                    </div>
+                    
+                    <div class="summary-agencias">
+                        <div class="summary-total" style="margin-top: 0; padding-top: 0; border: 0;">
+                            <strong>Volumétrico por Agencia:</strong>
+                        </div>
+                        <div class="summary-agencia" id="summary-txt">
+                            <div>
+                                <div class="summary-agencia-name">🚚 TXT <span class="agencia-coef">220</span></div>
+                            </div>
+                            <div class="summary-agencia-vol" id="volumetricoTXT">0 kg</div>
+                        </div>
+                        <div class="summary-agencia" id="summary-schenker">
+                            <div>
+                                <div class="summary-agencia-name">🚚 Schenker <span class="agencia-coef">225</span></div>
+                            </div>
+                            <div class="summary-agencia-vol" id="volumetricoSchenker">0 kg</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-total">
+                        💡 <strong>Se cotizará con ambas agencias</strong> y se seleccionará la mejor opción automáticamente.
+                    </div>
+                </div>
+                
+                <!-- Botón Enviar -->
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    📤 Enviar Pedido Completo
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de éxito -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">✅</div>
+            <h2>¡Pedido Registrado!</h2>
+            <p id="successMessage">El pedido se ha procesado correctamente y se ha enviado a gestión.</p>
+            <button class="close-btn" onclick="resetForm()">Registrar Nuevo Pedido</button>
+        </div>
+    </div>
+    
+    <script>
+        let palletCount = 0;
+        
+        // Coeficientes de las agencias
+        const COEF_TXT = 220;
+        const COEF_SCHENKER = 225;
+        
+        // Añadir pallet inicial al cargar
+        window.onload = function() {
+            addPallet();
+        };
+        
+        function calcularVolumetrico(largo, ancho, alto, cantidad, coeficiente) {
+            // 1. Calcular m³: (L_cm/100 × A_cm/100 × H_cm/100 × Cantidad)
+            const m3 = (largo / 100) * (ancho / 100) * (alto / 100) * cantidad;
+            // 2. Multiplicar por coeficiente
+            return m3 * coeficiente;
+        }
+        
+        function addPallet() {
+            palletCount++;
+            const container = document.getElementById('palletsContainer');
+            
+            const palletCard = document.createElement('div');
+            palletCard.className = 'pallet-card';
+            palletCard.id = `pallet-${palletCount}`;
+            
+            palletCard.innerHTML = `
+                <div class="pallet-header">
+                    <div class="pallet-title">
+                        🔷 Grupo ${palletCount}
+                    </div>
+                    ${palletCount > 1 ? `<button type="button" class="delete-btn" onclick="deletePallet(${palletCount})">🗑️</button>` : ''}
+                </div>
+                
+                <div class="form-group">
+                    <label>Cantidad de pallets</label>
+                    <input type="number" class="pallet-cantidad" min="1" value="1" placeholder="Ej: 2" onchange="updateSummary()" required>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>Largo (cm)</label>
+                        <input type="number" class="pallet-largo" min="10" placeholder="120" onchange="updateSummary()" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ancho (cm)</label>
+                        <input type="number" class="pallet-ancho" min="10" placeholder="80" onchange="updateSummary()" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Alto (cm)</label>
+                        <input type="number" class="pallet-alto" min="10" placeholder="150" onchange="updateSummary()" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Observaciones (opcional)</label>
+                    <input type="text" class="pallet-obs" placeholder="Ej: Mamparas - Frágil">
+                </div>
+                
+                <div class="volumetrico-container" id="volumetrico-${palletCount}">
+                    <div class="volumetrico-title">📊 Volumétrico por Agencia</div>
+                    <div class="volumetrico-row" id="vol-txt-${palletCount}">
+                        <div class="agencia-name">
+                            🚚 TXT <span class="agencia-coef">220</span>
+                        </div>
+                        <div class="volumetrico-value">-- kg</div>
+                    </div>
+                    <div class="volumetrico-row" id="vol-schenker-${palletCount}">
+                        <div class="agencia-name">
+                            🚚 Schenker <span class="agencia-coef">225</span>
+                        </div>
+                        <div class="volumetrico-value">-- kg</div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(palletCard);
+            updateSummary();
+        }
+        
+        function deletePallet(id) {
+            const pallet = document.getElementById(`pallet-${id}`);
+            pallet.style.animation = 'slideOut 0.3s ease-out';
+            
+            setTimeout(() => {
+                pallet.remove();
+                updateSummary();
+                renumberPallets();
+            }, 300);
+        }
+        
+        function renumberPallets() {
+            const pallets = document.querySelectorAll('.pallet-card');
+            pallets.forEach((pallet, index) => {
+                const title = pallet.querySelector('.pallet-title');
+                title.innerHTML = `🔷 Grupo ${index + 1}`;
+            });
+        }
+        
+        function updateSummary() {
+            const pallets = document.querySelectorAll('.pallet-card');
+            let totalPallets = 0;
+            let volumetricoTXTTotal = 0;
+            let volumetricoSchenkerTotal = 0;
+            let allValid = true;
+            
+            pallets.forEach((pallet, index) => {
+                const cantidad = parseFloat(pallet.querySelector('.pallet-cantidad').value) || 0;
+                const largo = parseFloat(pallet.querySelector('.pallet-largo').value) || 0;
+                const ancho = parseFloat(pallet.querySelector('.pallet-ancho').value) || 0;
+                const alto = parseFloat(pallet.querySelector('.pallet-alto').value) || 0;
+                
+                if (cantidad > 0 && largo >= 10 && ancho >= 10 && alto >= 10) {
+                    // Calcular con ambos coeficientes
+                    const volTXT = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_TXT);
+                    const volSchenker = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_SCHENKER);
+                    
+                    // Actualizar display individual
+                    const palletId = pallet.id.split('-')[1];
+                    const rowTXT = document.getElementById(`vol-txt-${palletId}`);
+                    const rowSchenker = document.getElementById(`vol-schenker-${palletId}`);
+                    
+                    if (rowTXT && rowSchenker) {
+                        // Determinar cuál es mejor (menor volumétrico)
+                        const mejor = volTXT < volSchenker ? 'txt' : 'schenker';
+                        
+                        rowTXT.classList.remove('mejor-opcion');
+                        rowSchenker.classList.remove('mejor-opcion');
+                        
+                        if (mejor === 'txt') {
+                            rowTXT.classList.add('mejor-opcion');
+                        } else {
+                            rowSchenker.classList.add('mejor-opcion');
+                        }
+                        
+                        rowTXT.querySelector('.volumetrico-value').textContent = volTXT.toFixed(2) + ' kg';
+                        rowSchenker.querySelector('.volumetrico-value').textContent = volSchenker.toFixed(2) + ' kg';
+                    }
+                    
+                    totalPallets += cantidad;
+                    volumetricoTXTTotal += volTXT;
+                    volumetricoSchenkerTotal += volSchenker;
+                } else {
+                    allValid = false;
+                }
+            });
+            
+            // Actualizar resumen
+            if (pallets.length > 0) {
+                document.getElementById('summary').style.display = 'block';
+                document.getElementById('totalPallets').textContent = totalPallets;
+                document.getElementById('totalGrupos').textContent = pallets.length;
+                document.getElementById('volumetricoTXT').textContent = volumetricoTXTTotal.toFixed(2) + ' kg';
+                document.getElementById('volumetricoSchenker').textContent = volumetricoSchenkerTotal.toFixed(2) + ' kg';
+                
+                // Marcar el mejor en el resumen
+                const summaryTXT = document.getElementById('summary-txt');
+                const summarySchenker = document.getElementById('summary-schenker');
+                
+                summaryTXT.classList.remove('mejor');
+                summarySchenker.classList.remove('mejor');
+                
+                if (volumetricoTXTTotal < volumetricoSchenkerTotal) {
+                    summaryTXT.classList.add('mejor');
+                } else if (volumetricoSchenkerTotal < volumetricoTXTTotal) {
+                    summarySchenker.classList.add('mejor');
+                }
+            } else {
+                document.getElementById('summary').style.display = 'none';
+            }
+            
+            // Habilitar/deshabilitar botón enviar
+            const numeroPedido = document.getElementById('numeroPedido').value.trim();
+            const destino = document.getElementById('destino').value;
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (pallets.length > 0 && allValid && numeroPedido && destino) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+        
+        // Validación en tiempo real
+        document.getElementById('numeroPedido').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            updateSummary();
+        });
+        
+        document.getElementById('destino').addEventListener('change', updateSummary);
+        
+        // Enviar formulario
+        document.getElementById('pedidoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const numeroPedido = document.getElementById('numeroPedido').value.trim();
+            const destino = document.getElementById('destino').value;
+            const pallets = [];
+            
+            let volumetricoTXTTotal = 0;
+            let volumetricoSchenkerTotal = 0;
+            let totalPallets = 0;
+            
+            document.querySelectorAll('.pallet-card').forEach((pallet, index) => {
+                const cantidad = parseInt(pallet.querySelector('.pallet-cantidad').value);
+                const largo = parseInt(pallet.querySelector('.pallet-largo').value);
+                const ancho = parseInt(pallet.querySelector('.pallet-ancho').value);
+                const alto = parseInt(pallet.querySelector('.pallet-alto').value);
+                const observaciones = pallet.querySelector('.pallet-obs').value;
+                
+                const volTXT = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_TXT);
+                const volSchenker = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_SCHENKER);
+                
+                pallets.push({
+                    grupo: index + 1,
+                    cantidad: cantidad,
+                    largo: largo,
+                    ancho: ancho,
+                    alto: alto,
+                    volumetrico_txt: Math.round(volTXT * 100) / 100,
+                    volumetrico_schenker: Math.round(volSchenker * 100) / 100,
+                    observaciones: observaciones
+                });
+                
+                volumetricoTXTTotal += volTXT;
+                volumetricoSchenkerTotal += volSchenker;
+                totalPallets += cantidad;
+            });
+            
+            const payload = {
+                numero_pedido: numeroPedido,
+                destino: destino,
+                total_pallets: totalPallets,
+                total_grupos: pallets.length,
+                volumetrico_txt: Math.round(volumetricoTXTTotal * 100) / 100,
+                volumetrico_schenker: Math.round(volumetricoSchenkerTotal * 100) / 100,
+                agencia_recomendada: volumetricoTXTTotal < volumetricoSchenkerTotal ? 'TXT' : 'Schenker',
+                diferencia_volumetrica: Math.abs(Math.round((volumetricoTXTTotal - volumetricoSchenkerTotal) * 100) / 100),
+                pallets: pallets,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('📦 Enviando a Make.com:', payload);
+            
+            // ENVIAR A MAKE.COM
+            fetch('https://hook.eu2.make.com/l6s81fqqdezb8b6bphamj9v4qq71ikex', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json().catch(() => ({})); // Si no hay JSON, devolver objeto vacío
+            })
+            .then(data => {
+                console.log('✅ Respuesta de Make.com:', data);
+                showSuccess(payload);
+            })
+            .catch(error => {
+                console.error('❌ Error:', error);
+                alert('Error al enviar el pedido. Por favor, inténtalo de nuevo.');
+            });
+        });
+        
+        function showSuccess(data) {
+            const modal = document.getElementById('successModal');
+            const message = document.getElementById('successMessage');
+            
+            const mejor = data.agencia_recomendada || 'TXT';
+            const volMejor = mejor === 'TXT' ? data.volumetrico_txt : data.volumetrico_schenker;
+            
+            message.innerHTML = `
+                <strong>Pedido ${data.numero_pedido}</strong><br>
+                ${data.total_pallets} pallets • ${data.total_grupos} grupos<br><br>
+                <div style="background: #d4edda; padding: 10px; border-radius: 8px; margin: 10px 0;">
+                    <strong>🚚 TXT:</strong> ${data.volumetrico_txt} kg<br>
+                    <strong>🚚 Schenker:</strong> ${data.volumetrico_schenker} kg<br><br>
+                    ✅ <strong>Mejor opción inicial:</strong> ${mejor} (${volMejor} kg)<br>
+                    <small>Diferencia: ${data.diferencia_volumetrica} kg</small>
+                </div>
+                El sistema cotizará con ambas agencias para confirmar la mejor tarifa.
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function resetForm() {
+            document.getElementById('successModal').style.display = 'none';
+            document.getElementById('pedidoForm').reset();
+            document.getElementById('palletsContainer').innerHTML = '';
+            palletCount = 0;
+            addPallet();
+            updateSummary();
+        }
+    </script>
+</body>
+</html>
