@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registro de Pedidos - Art & Bath</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2C3E50 0%, #3498DB 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .form-content {
+            padding: 25px 20px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 6px;
+        }
+        
+        .form-group label .required {
+            color: #e74c3c;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498DB;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .pallets-container {
+            margin-top: 20px;
+        }
+        
+        .pallet-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .pallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .pallet-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2C3E50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:active {
+            transform: scale(0.95);
+            background: #c0392b;
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .pallet-card input {
+            padding: 10px 12px;
+            font-size: 15px;
+        }
+        
+        .volumetrico-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        
+        .volumetrico-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6c757d;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .volumetrico-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .volumetrico-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .agencia-name {
+            font-weight: 600;
+            color: #2C3E50;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .agencia-coef {
+            font-size: 11px;
+            color: #6c757d;
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .volumetrico-value {
+            font-weight: 700;
+            color: #3498DB;
+        }
+        
+        .precio-value {
+            font-weight: 700;
+            color: #27ae60;
+            font-size: 15px;
+        }
+        
+        .mejor-opcion {
+            background: #d4edda !important;
+            border: 2px solid #28a745;
+        }
+        
+        .mejor-opcion .volumetrico-value,
+        .mejor-opcion .precio-value {
+            color: #28a745;
+        }
+        
+        .add-pallet-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            border: 2px dashed #3498DB;
+            border-radius: 12px;
+            color: #3498DB;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        .add-pallet-btn:active {
+            transform: scale(0.98);
+            background: #e3f2fd;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .summary h3 {
+            font-size: 16px;
+            color: #2C3E50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .summary-item strong {
+            color: #2C3E50;
+        }
+        
+        .summary-agencias {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-agencia {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .summary-agencia:last-child {
+            margin-bottom: 0;
+        }
+        
+        .summary-agencia.mejor {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        
+        .summary-agencia-name {
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .summary-agencia-info {
+            text-align: right;
+        }
+        
+        .summary-agencia-vol {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .summary-agencia-precio {
+            font-weight: 700;
+            font-size: 16px;
+            color: #3498DB;
+        }
+        
+        .summary-agencia.mejor .summary-agencia-precio {
+            color: #28a745;
+        }
+        
+        .summary-total {
+            border-top: 2px solid #dee2e6;
+            margin-top: 15px;
+            padding-top: 15px;
+            font-size: 14px;
+        }
+        
+        .mejor-badge {
+            background: #28a745;
+            color: white;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #3498DB 0%, #2C3E50 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .success-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            text-align: center;
+            animation: popIn 0.3s ease-out;
+        }
+        
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        
+        .success-content h2 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        .success-content p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .close-btn {
+            padding: 12px 30px;
+            background: #3498DB;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            color: #0d47a1;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498DB;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .form-content {
+                padding: 20px 15px;
+            }
+            
+            .pallet-card {
+                padding: 15px;
+            }
+            
+            .row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 Art & Bath</h1>
+            <p>Sistema Inteligente de Cotización de Envíos</p>
+        </div>
+        
+        <div class="form-content">
+            <form id="pedidoForm">
+                <!-- Info sobre sistema inteligente -->
+                <div class="info-box">
+                    ✨ <strong>Sistema Inteligente:</strong> El sistema calcula automáticamente las tarifas de TXT y Schenker consultando las tarifas reales y selecciona la mejor opción para ti.
+                </div>
+                
+                <!-- Datos del Pedido -->
+                <div class="section">
+                    <div class="section-title">📋 Datos del Pedido</div>
+                    
+                    <div class="form-group">
+                        <label for="numeroPedido">Número de Pedido <span class="required">*</span></label>
+                        <input type="text" id="numeroPedido" placeholder="Ej: P-2024-0850" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="destino">Provincia de destino <span class="required">*</span></label>
+                        <select id="destino" required>
+                            <option value="">-- Selecciona provincia --</option>
+                            <option value="Álava">Álava</option>
+                            <option value="Albacete">Albacete</option>
+                            <option value="Alicante">Alicante</option>
+                            <option value="Almería">Almería</option>
+                            <option value="Asturias">Asturias</option>
+                            <option value="Ávila">Ávila</option>
+                            <option value="Badajoz">Badajoz</option>
+                            <option value="Baleares">Baleares</option>
+                            <option value="Barcelona">Barcelona</option>
+                            <option value="Burgos">Burgos</option>
+                            <option value="Cáceres">Cáceres</option>
+                            <option value="Cádiz">Cádiz</option>
+                            <option value="Cantabria">Cantabria</option>
+                            <option value="Castellón">Castellón</option>
+                            <option value="Ciudad Real">Ciudad Real</option>
+                            <option value="Córdoba">Córdoba</option>
+                            <option value="Cuenca">Cuenca</option>
+                            <option value="Girona">Girona</option>
+                            <option value="Granada">Granada</option>
+                            <option value="Guadalajara">Guadalajara</option>
+                            <option value="Guipúzcoa">Guipúzcoa</option>
+                            <option value="Huelva">Huelva</option>
+                            <option value="Huesca">Huesca</option>
+                            <option value="Jaén">Jaén</option>
+                            <option value="La Coruña">La Coruña</option>
+                            <option value="La Rioja">La Rioja</option>
+                            <option value="Las Palmas">Las Palmas</option>
+                            <option value="León">León</option>
+                            <option value="Lleida">Lleida</option>
+                            <option value="Lugo">Lugo</option>
+                            <option value="Madrid">Madrid</option>
+                            <option value="Málaga">Málaga</option>
+                            <option value="Murcia">Murcia</option>
+                            <option value="Navarra">Navarra</option>
+                            <option value="Orense">Orense</option>
+                            <option value="Palencia">Palencia</option>
+                            <option value="Pontevedra">Pontevedra</option>
+                            <option value="Salamanca">Salamanca</option>
+                            <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
+                            <option value="Segovia">Segovia</option>
+                            <option value="Sevilla">Sevilla</option>
+                            <option value="Soria">Soria</option>
+                            <option value="Tarragona">Tarragona</option>
+                            <option value="Teruel">Teruel</option>
+                            <option value="Toledo">Toledo</option>
+                            <option value="Valencia">Valencia</option>
+                            <option value="Valladolid">Valladolid</option>
+                            <option value="Vizcaya">Vizcaya</option>
+                            <option value="Zamora">Zamora</option>
+                            <option value="Zaragoza">Zaragoza</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Pallets -->
+                <div class="section">
+                    <div class="section-title">📦 Pallets del Pedido</div>
+                    
+                    <div class="alert">
+                        💡 <strong>Tip:</strong> Añade todos los grupos de pallets. El sistema calculará automáticamente el mejor precio consultando las tarifas reales de ambas agencias.
+                    </div>
+                    
+                    <div id="palletsContainer" class="pallets-container">
+                        <!-- Los pallets se añaden aquí dinámicamente -->
+                    </div>
+                    
+                    <button type="button" class="add-pallet-btn" onclick="addPallet()">
+                        ➕ Añadir Grupo de Pallets
+                    </button>
+                </div>
+                
+                <!-- Resumen con precios -->
+                <div class="summary" id="summary" style="display: none;">
+                    <h3>📊 Cotización Inteligente</h3>
+                    <div class="summary-item">
+                        <span>Total de pallets:</span>
+                        <strong id="totalPallets">0</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Grupos de medidas:</span>
+                        <strong id="totalGrupos">0</strong>
+                    </div>
+                    
+                    <div class="summary-agencias">
+                        <div class="summary-total" style="margin-top: 0; padding-top: 0; border: 0; margin-bottom: 10px;">
+                            <strong>Comparación de Tarifas:</strong>
+                        </div>
+                        <div class="summary-agencia" id="summary-txt">
+                            <div>
+                                <div class="summary-agencia-name">🚚 TXT</div>
+                            </div>
+                            <div class="summary-agencia-info">
+                                <div class="summary-agencia-vol" id="volumetricoTXT">-- kg</div>
+                                <div class="summary-agencia-precio" id="precioTXT">-- €</div>
+                            </div>
+                        </div>
+                        <div class="summary-agencia" id="summary-schenker">
+                            <div>
+                                <div class="summary-agencia-name">🚚 Schenker</div>
+                            </div>
+                            <div class="summary-agencia-info">
+                                <div class="summary-agencia-vol" id="volumetricoSchenker">-- kg</div>
+                                <div class="summary-agencia-precio" id="precioSchenker">-- €</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-total" id="mejorOpcionDiv" style="display: none;">
+                        ✅ <strong>Mejor opción:</strong> <span id="mejorAgencia">--</span> 
+                        • Coste: <strong id="mejorPrecio">--</strong> 
+                        • Ahorro: <strong id="ahorroTotal">--</strong>
+                    </div>
+                </div>
+                
+                <!-- Botón Enviar -->
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    📤 Enviar Pedido Completo
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de éxito -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">✅</div>
+            <h2>¡Pedido Registrado!</h2>
+            <p id="successMessage">El pedido se ha procesado correctamente.</p>
+            <button class="close-btn" onclick="resetForm()">Registrar Nuevo Pedido</button>
+        </div>
+    </div>
+    
+    <script>
+        let palletCount = 0;
+        let tarifasData = null;
+        let zonasData = null;
+        
+        // Coeficientes de las agencias
+        const COEF_TXT = 220;
+        const COEF_SCHENKER = 225;
+        
+        // URL del webhook de Make.com
+        const WEBHOOK_URL = 'https://hook.eu2.make.com/l6s81fqqdezb8b6bphamj9v4qq71ikex';
+        
+        // URL del Google Sheets publicado
+        const SHEETS_ID = '2PACX-1vRAtZ3OsIcGDJ6TS0r2P6u9SJKDzdyNSiTGBYBHSeu-ydHcs67QGYpVd8PuX1hIS46OfqzZJSceNrVS';
+        
+        // Cargar datos de Google Sheets al inicio
+        window.onload = async function() {
+            await cargarDatosSheets();
+            addPallet();
+        };
+        
+        async function cargarDatosSheets() {
+            try {
+                // Cargar hoja de Zonas (Ciudades)
+                const zonasUrl = `https://docs.google.com/spreadsheets/d/e/${SHEETS_ID}/pub?gid=0&single=true&output=csv`;
+                const zonasResponse = await fetch(zonasUrl);
+                const zonasCSV = await zonasResponse.text();
+                zonasData = parseCSV(zonasCSV);
+                
+                // Cargar hoja de Tarifas
+                const tarifasUrl = `https://docs.google.com/spreadsheets/d/e/${SHEETS_ID}/pub?gid=1609016850&single=true&output=csv`;
+                const tarifasResponse = await fetch(tarifasUrl);
+                const tarifasCSV = await tarifasResponse.text();
+                tarifasData = parseCSV(tarifasCSV);
+                
+                console.log('✅ Datos cargados:', {
+                    zonas: zonasData.length,
+                    tarifas: tarifasData.length
+                });
+            } catch (error) {
+                console.error('❌ Error cargando datos:', error);
+                alert('Error al cargar las tarifas. Por favor, recarga la página.');
+            }
+        }
+        
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = values[index];
+                });
+                data.push(row);
+            }
+            
+            return data;
+        }
+        
+        function buscarZona(ciudad, agencia) {
+            if (!zonasData) return null;
+            
+            const zona = zonasData.find(row => 
+                row.Ciudad && row.Ciudad.toUpperCase() === ciudad.toUpperCase() &&
+                row.Agencia && row.Agencia.toUpperCase() === agencia.toUpperCase()
+            );
+            
+            return zona ? parseInt(zona.Zona) : null;
+        }
+        
+        function buscarTarifa(agencia, zona, volumetrico) {
+            if (!tarifasData || !zona) return null;
+            
+            const tarifa = tarifasData.find(row => {
+                const rowAgencia = row.Agencia || '';
+                const rowZona = parseInt(row.Zona);
+                const kgMin = parseFloat(row.Kg_Min);
+                const kgMax = parseFloat(row.Kg_Max);
+                
+                return rowAgencia.toUpperCase() === agencia.toUpperCase() &&
+                       rowZona === zona &&
+                       volumetrico >= kgMin &&
+                       volumetrico < kgMax;
+            });
+            
+            return tarifa ? parseFloat(tarifa.Tarifa_EUR) : null;
+        }
+        
+        function calcularVolumetrico(largo, ancho, alto, cantidad, coeficiente) {
+            const m3 = (largo / 100) * (ancho / 100) * (alto / 100) * cantidad;
+            return m3 * coeficiente;
+        }
+        
+        function addPallet() {
+            palletCount++;
+            const container = document.getElementById('palletsContainer');
+            
+            const palletCard = document.createElement('div');
+            palletCard.className = 'pallet-card';
+            palletCard.id = `pallet-${palletCount}`;
+            
+            palletCard.innerHTML = `
+                <div class="pallet-header">
+                    <div class="pallet-title">
+                        🔷 Grupo ${palletCount}
+                    </div>
+                    ${palletCount > 1 ? `<button type="button" class="delete-btn" onclick="deletePallet(${palletCount})">🗑️</button>` : ''}
+                </div>
+                
+                <div class="form-group">
+                    <label>Cantidad de pallets</label>
+                    <input type="number" class="pallet-cantidad" min="1" value="1" placeholder="Ej: 2" onchange="updateSummary()" required>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label>Largo (cm)</label>
+                        <input type="number" class="pallet-largo" min="10" placeholder="120" onchange="updateSummary()" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ancho (cm)</label>
+                        <input type="number" class="pallet-ancho" min="10" placeholder="80" onchange="updateSummary()" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Alto (cm)</label>
+                        <input type="number" class="pallet-alto" min="10" placeholder="150" onchange="updateSummary()" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Observaciones (opcional)</label>
+                    <input type="text" class="pallet-obs" placeholder="Ej: Mamparas - Frágil">
+                </div>
+                
+                <div class="volumetrico-container" id="volumetrico-${palletCount}">
+                    <div class="volumetrico-title">📊 Volumétrico por Agencia</div>
+                    <div class="volumetrico-row" id="vol-txt-${palletCount}">
+                        <div class="agencia-name">
+                            🚚 TXT <span class="agencia-coef">220</span>
+                        </div>
+                        <div class="volumetrico-value">-- kg</div>
+                    </div>
+                    <div class="volumetrico-row" id="vol-schenker-${palletCount}">
+                        <div class="agencia-name">
+                            🚚 Schenker <span class="agencia-coef">225</span>
+                        </div>
+                        <div class="volumetrico-value">-- kg</div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(palletCard);
+            updateSummary();
+        }
+        
+        function deletePallet(id) {
+            const pallet = document.getElementById(`pallet-${id}`);
+            pallet.style.animation = 'slideOut 0.3s ease-out';
+            
+            setTimeout(() => {
+                pallet.remove();
+                updateSummary();
+                renumberPallets();
+            }, 300);
+        }
+        
+        function renumberPallets() {
+            const pallets = document.querySelectorAll('.pallet-card');
+            pallets.forEach((pallet, index) => {
+                const title = pallet.querySelector('.pallet-title');
+                title.innerHTML = `🔷 Grupo ${index + 1}`;
+            });
+        }
+        
+        async function updateSummary() {
+            const pallets = document.querySelectorAll('.pallet-card');
+            const destino = document.getElementById('destino').value;
+            
+            let totalPallets = 0;
+            let volumetricoTXTTotal = 0;
+            let volumetricoSchenkerTotal = 0;
+            let allValid = true;
+            
+            pallets.forEach((pallet, index) => {
+                const cantidad = parseFloat(pallet.querySelector('.pallet-cantidad').value) || 0;
+                const largo = parseFloat(pallet.querySelector('.pallet-largo').value) || 0;
+                const ancho = parseFloat(pallet.querySelector('.pallet-ancho').value) || 0;
+                const alto = parseFloat(pallet.querySelector('.pallet-alto').value) || 0;
+                
+                if (cantidad > 0 && largo >= 10 && ancho >= 10 && alto >= 10) {
+                    const volTXT = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_TXT);
+                    const volSchenker = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_SCHENKER);
+                    
+                    const palletId = pallet.id.split('-')[1];
+                    const rowTXT = document.getElementById(`vol-txt-${palletId}`);
+                    const rowSchenker = document.getElementById(`vol-schenker-${palletId}`);
+                    
+                    if (rowTXT && rowSchenker) {
+                        rowTXT.querySelector('.volumetrico-value').textContent = volTXT.toFixed(2) + ' kg';
+                        rowSchenker.querySelector('.volumetrico-value').textContent = volSchenker.toFixed(2) + ' kg';
+                    }
+                    
+                    totalPallets += cantidad;
+                    volumetricoTXTTotal += volTXT;
+                    volumetricoSchenkerTotal += volSchenker;
+                } else {
+                    allValid = false;
+                }
+            });
+            
+            // Actualizar resumen
+            if (pallets.length > 0) {
+                document.getElementById('summary').style.display = 'block';
+                document.getElementById('totalPallets').textContent = totalPallets;
+                document.getElementById('totalGrupos').textContent = pallets.length;
+                document.getElementById('volumetricoTXT').textContent = volumetricoTXTTotal.toFixed(2) + ' kg';
+                document.getElementById('volumetricoSchenker').textContent = volumetricoSchenkerTotal.toFixed(2) + ' kg';
+                
+                // Buscar tarifas si hay destino seleccionado
+                if (destino && allValid && tarifasData && zonasData) {
+                    const zonaTXT = buscarZona(destino, 'TXT');
+                    const zonaSchenker = buscarZona(destino, 'Schenker');
+                    
+                    const tarifaTXT = buscarTarifa('TXT', zonaTXT, volumetricoTXTTotal);
+                    const tarifaSchenker = buscarTarifa('Schenker', zonaSchenker, volumetricoSchenkerTotal);
+                    
+                    if (tarifaTXT !== null) {
+                        document.getElementById('precioTXT').textContent = tarifaTXT.toFixed(2) + ' €';
+                    } else {
+                        document.getElementById('precioTXT').textContent = '-- €';
+                    }
+                    
+                    if (tarifaSchenker !== null) {
+                        document.getElementById('precioSchenker').textContent = tarifaSchenker.toFixed(2) + ' €';
+                    } else {
+                        document.getElementById('precioSchenker').textContent = '-- €';
+                    }
+                    
+                    // Determinar mejor opción
+                    if (tarifaTXT !== null && tarifaSchenker !== null) {
+                        const summaryTXT = document.getElementById('summary-txt');
+                        const summarySchenker = document.getElementById('summary-schenker');
+                        
+                        summaryTXT.classList.remove('mejor');
+                        summarySchenker.classList.remove('mejor');
+                        
+                        let mejorAgencia, mejorPrecio, ahorro;
+                        
+                        if (tarifaTXT < tarifaSchenker) {
+                            summaryTXT.classList.add('mejor');
+                            mejorAgencia = 'TXT';
+                            mejorPrecio = tarifaTXT;
+                            ahorro = tarifaSchenker - tarifaTXT;
+                        } else {
+                            summarySchenker.classList.add('mejor');
+                            mejorAgencia = 'Schenker';
+                            mejorPrecio = tarifaSchenker;
+                            ahorro = tarifaTXT - tarifaSchenker;
+                        }
+                        
+                        document.getElementById('mejorAgencia').textContent = mejorAgencia;
+                        document.getElementById('mejorPrecio').textContent = mejorPrecio.toFixed(2) + ' €';
+                        document.getElementById('ahorroTotal').textContent = ahorro.toFixed(2) + ' €';
+                        document.getElementById('mejorOpcionDiv').style.display = 'block';
+                    }
+                }
+            } else {
+                document.getElementById('summary').style.display = 'none';
+            }
+            
+            // Habilitar/deshabilitar botón enviar
+            const numeroPedido = document.getElementById('numeroPedido').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (pallets.length > 0 && allValid && numeroPedido && destino) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+        
+        // Validación en tiempo real
+        document.getElementById('numeroPedido').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            updateSummary();
+        });
+        
+        document.getElementById('destino').addEventListener('change', updateSummary);
+        
+        // Enviar formulario
+        document.getElementById('pedidoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const numeroPedido = document.getElementById('numeroPedido').value.trim();
+            const destino = document.getElementById('destino').value;
+            const pallets = [];
+            
+            let volumetricoTXTTotal = 0;
+            let volumetricoSchenkerTotal = 0;
+            let totalPallets = 0;
+            
+            document.querySelectorAll('.pallet-card').forEach((pallet, index) => {
+                const cantidad = parseInt(pallet.querySelector('.pallet-cantidad').value);
+                const largo = parseInt(pallet.querySelector('.pallet-largo').value);
+                const ancho = parseInt(pallet.querySelector('.pallet-ancho').value);
+                const alto = parseInt(pallet.querySelector('.pallet-alto').value);
+                const observaciones = pallet.querySelector('.pallet-obs').value;
+                
+                const volTXT = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_TXT);
+                const volSchenker = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_SCHENKER);
+                
+                pallets.push({
+                    grupo: index + 1,
+                    cantidad: cantidad,
+                    largo: largo,
+                    ancho: ancho,
+                    alto: alto,
+                    volumetrico_txt: Math.round(volTXT * 100) / 100,
+                    volumetrico_schenker: Math.round(volSchenker * 100) / 100,
+                    observaciones: observaciones
+                });
+                
+                volumetricoTXTTotal += volTXT;
+                volumetricoSchenkerTotal += volSchenker;
+                totalPallets += cantidad;
+            });
+            
+            // Buscar zonas y tarifas
+            const zonaTXT = buscarZona(destino, 'TXT');
+            const zonaSchenker = buscarZona(destino, 'Schenker');
+            
+            const tarifaTXT = buscarTarifa('TXT', zonaTXT, volumetricoTXTTotal);
+            const tarifaSchenker = buscarTarifa('Schenker', zonaSchenker, volumetricoSchenkerTotal);
+            
+            let agenciaRecomendada, costeFinal, ahorro;
+            
+            if (tarifaTXT !== null && tarifaSchenker !== null) {
+                if (tarifaTXT < tarifaSchenker) {
+                    agenciaRecomendada = 'TXT';
+                    costeFinal = tarifaTXT;
+                    ahorro = tarifaSchenker - tarifaTXT;
+                } else {
+                    agenciaRecomendada = 'Schenker';
+                    costeFinal = tarifaSchenker;
+                    ahorro = tarifaTXT - tarifaSchenker;
+                }
+            } else {
+                alert('No se pudieron calcular las tarifas. Verifica el destino y los datos.');
+                return;
+            }
+            
+            const payload = {
+                numero_pedido: numeroPedido,
+                destino: destino,
+                total_pallets: totalPallets,
+                total_grupos: pallets.length,
+                volumetrico_txt: Math.round(volumetricoTXTTotal * 100) / 100,
+                volumetrico_schenker: Math.round(volumetricoSchenkerTotal * 100) / 100,
+                zona_txt: zonaTXT,
+                zona_schenker: zonaSchenker,
+                tarifa_txt: Math.round(tarifaTXT * 100) / 100,
+                tarifa_schenker: Math.round(tarifaSchenker * 100) / 100,
+                agencia_seleccionada: agenciaRecomendada,
+                coste_final: Math.round(costeFinal * 100) / 100,
+                ahorro: Math.round(ahorro * 100) / 100,
+                pallets: pallets,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('📦 Enviando a Make.com:', payload);
+            
+            // ENVIAR A MAKE.COM
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                
+                console.log('✅ Pedido enviado correctamente');
+                showSuccess(payload);
+            } catch (error) {
+                console.error('❌ Error:', error);
+                alert('Error al enviar el pedido. Por favor, inténtalo de nuevo.');
+            }
+        });
+        
+        function showSuccess(data) {
+            const modal = document.getElementById('successModal');
+            const message = document.getElementById('successMessage');
+            
+            message.innerHTML = `
+                <strong>Pedido ${data.numero_pedido}</strong><br>
+                Destino: ${data.destino}<br>
+                ${data.total_pallets} pallets • ${data.total_grupos} grupos<br><br>
+                <div style="background: #d4edda; padding: 10px; border-radius: 8px; margin: 10px 0;">
+                    <strong>🚚 TXT:</strong> ${data.volumetrico_txt} kg → ${data.tarifa_txt} €<br>
+                    <strong>🚚 Schenker:</strong> ${data.volumetrico_schenker} kg → ${data.tarifa_schenker} €<br><br>
+                    ✅ <strong>Agencia seleccionada:</strong> ${data.agencia_seleccionada}<br>
+                    💰 <strong>Coste final:</strong> ${data.coste_final} €<br>
+                    📉 <strong>Ahorro:</strong> ${data.ahorro} €
+                </div>
+                El pedido ha sido registrado correctamente en el sistema.
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function resetForm() {
+            document.getElementById('successModal').style.display = 'none';
+            document.getElementById('pedidoForm').reset();
+            document.getElementById('palletsContainer').innerHTML = '';
+            palletCount = 0;
+            addPallet();
+            updateSummary();
+        }
+    </script>
+</body>
+</html>
