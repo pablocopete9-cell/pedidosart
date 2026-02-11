@@ -833,6 +833,7 @@
             let volumetricoTXTTotal = 0;
             let volumetricoSchenkerTotal = 0;
             let totalPallets = 0;
+            let m3Totales = 0;
             
             document.querySelectorAll('.pallet-card').forEach((pallet, index) => {
                 const cantidad = parseInt(pallet.querySelector('.pallet-cantidad').value);
@@ -844,6 +845,9 @@
                 const volTXT = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_TXT);
                 const volSchenker = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_SCHENKER);
                 
+                // Calcular M³ sin coeficientes
+                const m3 = (largo / 100) * (ancho / 100) * (alto / 100) * cantidad;
+                
                 pallets.push({
                     grupo: index + 1,
                     cantidad: cantidad,
@@ -852,12 +856,14 @@
                     alto: alto,
                     volumetrico_txt: Math.round(volTXT * 100) / 100,
                     volumetrico_schenker: Math.round(volSchenker * 100) / 100,
+                    m3: Math.round(m3 * 100) / 100,
                     observaciones: observaciones
                 });
                 
                 volumetricoTXTTotal += volTXT;
                 volumetricoSchenkerTotal += volSchenker;
                 totalPallets += cantidad;
+                m3Totales += m3;
             });
             
             const payload = {
@@ -867,6 +873,7 @@
                 total_grupos: pallets.length,
                 volumetrico_txt: Math.round(volumetricoTXTTotal * 100) / 100,
                 volumetrico_schenker: Math.round(volumetricoSchenkerTotal * 100) / 100,
+                m3_totales: Math.round(m3Totales * 100) / 100,
                 agencia_recomendada: volumetricoTXTTotal < volumetricoSchenkerTotal ? 'TXT' : 'Schenker',
                 diferencia_volumetrica: Math.abs(Math.round((volumetricoTXTTotal - volumetricoSchenkerTotal) * 100) / 100),
                 pallets: pallets,
@@ -923,4 +930,4 @@
         }
     </script>
 </body>
-</html>                                                        
+</html>                                                                                                                                                                                                                                                                    
