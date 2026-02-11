@@ -237,19 +237,12 @@
             color: #3498DB;
         }
         
-        .precio-value {
-            font-weight: 700;
-            color: #27ae60;
-            font-size: 15px;
-        }
-        
         .mejor-opcion {
             background: #d4edda !important;
             border: 2px solid #28a745;
         }
         
-        .mejor-opcion .volumetrico-value,
-        .mejor-opcion .precio-value {
+        .mejor-opcion .volumetrico-value {
             color: #28a745;
         }
         
@@ -315,10 +308,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
             background: #f8f9fa;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-size: 14px;
         }
         
@@ -336,39 +329,20 @@
             color: #2C3E50;
         }
         
-        .summary-agencia-info {
-            text-align: right;
-        }
-        
         .summary-agencia-vol {
-            font-size: 12px;
-            color: #6c757d;
-        }
-        
-        .summary-agencia-precio {
             font-weight: 700;
-            font-size: 16px;
             color: #3498DB;
         }
         
-        .summary-agencia.mejor .summary-agencia-precio {
+        .summary-agencia.mejor .summary-agencia-vol {
             color: #28a745;
         }
         
         .summary-total {
             border-top: 2px solid #dee2e6;
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 10px;
+            padding-top: 10px;
             font-size: 14px;
-        }
-        
-        .mejor-badge {
-            background: #28a745;
-            color: white;
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-weight: 600;
         }
         
         .submit-btn {
@@ -482,21 +456,6 @@
             line-height: 1.5;
         }
         
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498DB;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         @media (max-width: 480px) {
             .header h1 {
                 font-size: 20px;
@@ -521,14 +480,14 @@
     <div class="container">
         <div class="header">
             <h1>📦 Art & Bath</h1>
-            <p>Sistema Inteligente de Cotización de Envíos</p>
+            <p>Sistema de Registro de Envíos</p>
         </div>
         
         <div class="form-content">
             <form id="pedidoForm">
-                <!-- Info sobre sistema inteligente -->
+                <!-- Info sobre agencias -->
                 <div class="info-box">
-                    ✨ <strong>Sistema Inteligente:</strong> El sistema calcula automáticamente las tarifas de TXT y Schenker consultando las tarifas reales y selecciona la mejor opción para ti.
+                    ℹ️ <strong>Sistema dual de cálculo:</strong> El volumétrico se calcula con ambas agencias (TXT: 220 | Schenker: 225) para cotizar y elegir la mejor opción automáticamente.
                 </div>
                 
                 <!-- Datos del Pedido -->
@@ -541,9 +500,9 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="destino">Provincia de destino <span class="required">*</span></label>
+                        <label for="destino">Ciudad de destino <span class="required">*</span></label>
                         <select id="destino" required>
-                            <option value="">-- Selecciona provincia --</option>
+                            <option value="">-- Selecciona --</option>
                             <option value="Valencia">Valencia</option>
                             <option value="Álava">Álava</option>
                             <option value="Albacete">Albacete</option>
@@ -607,7 +566,7 @@
                     <div class="section-title">📦 Pallets del Pedido</div>
                     
                     <div class="alert">
-                        💡 <strong>Tip:</strong> Añade todos los grupos de pallets. El sistema calculará automáticamente el mejor precio consultando las tarifas reales de ambas agencias.
+                        💡 <strong>Tip:</strong> Añade todos los grupos de pallets con medidas diferentes. El sistema calculará el volumétrico con ambas agencias automáticamente.
                     </div>
                     
                     <div id="palletsContainer" class="pallets-container">
@@ -619,9 +578,9 @@
                     </button>
                 </div>
                 
-                <!-- Resumen con precios -->
+                <!-- Resumen -->
                 <div class="summary" id="summary" style="display: none;">
-                    <h3>📊 Cotización Inteligente</h3>
+                    <h3>📊 Resumen del Pedido</h3>
                     <div class="summary-item">
                         <span>Total de pallets:</span>
                         <strong id="totalPallets">0</strong>
@@ -632,33 +591,25 @@
                     </div>
                     
                     <div class="summary-agencias">
-                        <div class="summary-total" style="margin-top: 0; padding-top: 0; border: 0; margin-bottom: 10px;">
-                            <strong>Comparación de Tarifas:</strong>
+                        <div class="summary-total" style="margin-top: 0; padding-top: 0; border: 0;">
+                            <strong>Volumétrico por Agencia:</strong>
                         </div>
                         <div class="summary-agencia" id="summary-txt">
                             <div>
-                                <div class="summary-agencia-name">🚚 TXT</div>
+                                <div class="summary-agencia-name">🚚 TXT <span class="agencia-coef">220</span></div>
                             </div>
-                            <div class="summary-agencia-info">
-                                <div class="summary-agencia-vol" id="volumetricoTXT">-- kg</div>
-                                <div class="summary-agencia-precio" id="precioTXT">-- €</div>
-                            </div>
+                            <div class="summary-agencia-vol" id="volumetricoTXT">0 kg</div>
                         </div>
                         <div class="summary-agencia" id="summary-schenker">
                             <div>
-                                <div class="summary-agencia-name">🚚 Schenker</div>
+                                <div class="summary-agencia-name">🚚 Schenker <span class="agencia-coef">225</span></div>
                             </div>
-                            <div class="summary-agencia-info">
-                                <div class="summary-agencia-vol" id="volumetricoSchenker">-- kg</div>
-                                <div class="summary-agencia-precio" id="precioSchenker">-- €</div>
-                            </div>
+                            <div class="summary-agencia-vol" id="volumetricoSchenker">0 kg</div>
                         </div>
                     </div>
                     
-                    <div class="summary-total" id="mejorOpcionDiv" style="display: none;">
-                        ✅ <strong>Mejor opción:</strong> <span id="mejorAgencia">--</span> 
-                        • Coste: <strong id="mejorPrecio">--</strong> 
-                        • Ahorro: <strong id="ahorroTotal">--</strong>
+                    <div class="summary-total">
+                        💡 <strong>Se cotizará con ambas agencias</strong> y se seleccionará la mejor opción automáticamente.
                     </div>
                 </div>
                 
@@ -675,105 +626,27 @@
         <div class="success-content">
             <div class="success-icon">✅</div>
             <h2>¡Pedido Registrado!</h2>
-            <p id="successMessage">El pedido se ha procesado correctamente.</p>
+            <p id="successMessage">El pedido se ha procesado correctamente y se ha enviado a gestión.</p>
             <button class="close-btn" onclick="resetForm()">Registrar Nuevo Pedido</button>
         </div>
     </div>
     
     <script>
         let palletCount = 0;
-        let tarifasData = null;
-        let zonasData = null;
         
         // Coeficientes de las agencias
         const COEF_TXT = 220;
         const COEF_SCHENKER = 225;
         
-        // URL del webhook de Make.com
-        const WEBHOOK_URL = 'https://hook.eu2.make.com/l6s81fqqdezb8b6bphamj9v4qq71ikex';
-        
-        // URL del Google Sheets publicado
-        const SHEETS_ID = '2PACX-1vRAtZ3OsIcGDJ6TS0r2P6u9SJKDzdyNSiTGBYBHSeu-ydHcs67QGYpVd8PuX1hIS46OfqzZJSceNrVS';
-        
-        // Cargar datos de Google Sheets al inicio
-        window.onload = async function() {
-            await cargarDatosSheets();
+        // Añadir pallet inicial al cargar
+        window.onload = function() {
             addPallet();
         };
         
-        async function cargarDatosSheets() {
-            try {
-                // Cargar hoja de Zonas (Ciudades)
-                const zonasUrl = `https://docs.google.com/spreadsheets/d/e/${SHEETS_ID}/pub?gid=0&single=true&output=csv`;
-                const zonasResponse = await fetch(zonasUrl);
-                const zonasCSV = await zonasResponse.text();
-                zonasData = parseCSV(zonasCSV);
-                
-                // Cargar hoja de Tarifas
-                const tarifasUrl = `https://docs.google.com/spreadsheets/d/e/${SHEETS_ID}/pub?gid=1609016850&single=true&output=csv`;
-                const tarifasResponse = await fetch(tarifasUrl);
-                const tarifasCSV = await tarifasResponse.text();
-                tarifasData = parseCSV(tarifasCSV);
-                
-                console.log('✅ Datos cargados:', {
-                    zonas: zonasData.length,
-                    tarifas: tarifasData.length
-                });
-            } catch (error) {
-                console.error('❌ Error cargando datos:', error);
-                alert('Error al cargar las tarifas. Por favor, recarga la página.');
-            }
-        }
-        
-        function parseCSV(csv) {
-            const lines = csv.split('\n');
-            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-            const data = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-                const row = {};
-                headers.forEach((header, index) => {
-                    row[header] = values[index];
-                });
-                data.push(row);
-            }
-            
-            return data;
-        }
-        
-        function buscarZona(ciudad, agencia) {
-            if (!zonasData) return null;
-            
-            const zona = zonasData.find(row => 
-                row.Ciudad && row.Ciudad.toUpperCase() === ciudad.toUpperCase() &&
-                row.Agencia && row.Agencia.toUpperCase() === agencia.toUpperCase()
-            );
-            
-            return zona ? parseInt(zona.Zona) : null;
-        }
-        
-        function buscarTarifa(agencia, zona, volumetrico) {
-            if (!tarifasData || !zona) return null;
-            
-            const tarifa = tarifasData.find(row => {
-                const rowAgencia = row.Agencia || '';
-                const rowZona = parseInt(row.Zona);
-                const kgMin = parseFloat(row.Kg_Min);
-                const kgMax = parseFloat(row.Kg_Max);
-                
-                return rowAgencia.toUpperCase() === agencia.toUpperCase() &&
-                       rowZona === zona &&
-                       volumetrico >= kgMin &&
-                       volumetrico < kgMax;
-            });
-            
-            return tarifa ? parseFloat(tarifa.Tarifa_EUR) : null;
-        }
-        
         function calcularVolumetrico(largo, ancho, alto, cantidad, coeficiente) {
+            // 1. Calcular m³: (L_cm/100 × A_cm/100 × H_cm/100 × Cantidad)
             const m3 = (largo / 100) * (ancho / 100) * (alto / 100) * cantidad;
+            // 2. Multiplicar por coeficiente
             return m3 * coeficiente;
         }
         
@@ -858,10 +731,8 @@
             });
         }
         
-        async function updateSummary() {
+        function updateSummary() {
             const pallets = document.querySelectorAll('.pallet-card');
-            const destino = document.getElementById('destino').value;
-            
             let totalPallets = 0;
             let volumetricoTXTTotal = 0;
             let volumetricoSchenkerTotal = 0;
@@ -874,14 +745,28 @@
                 const alto = parseFloat(pallet.querySelector('.pallet-alto').value) || 0;
                 
                 if (cantidad > 0 && largo >= 10 && ancho >= 10 && alto >= 10) {
+                    // Calcular con ambos coeficientes
                     const volTXT = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_TXT);
                     const volSchenker = calcularVolumetrico(largo, ancho, alto, cantidad, COEF_SCHENKER);
                     
+                    // Actualizar display individual
                     const palletId = pallet.id.split('-')[1];
                     const rowTXT = document.getElementById(`vol-txt-${palletId}`);
                     const rowSchenker = document.getElementById(`vol-schenker-${palletId}`);
                     
                     if (rowTXT && rowSchenker) {
+                        // Determinar cuál es mejor (menor volumétrico)
+                        const mejor = volTXT < volSchenker ? 'txt' : 'schenker';
+                        
+                        rowTXT.classList.remove('mejor-opcion');
+                        rowSchenker.classList.remove('mejor-opcion');
+                        
+                        if (mejor === 'txt') {
+                            rowTXT.classList.add('mejor-opcion');
+                        } else {
+                            rowSchenker.classList.add('mejor-opcion');
+                        }
+                        
                         rowTXT.querySelector('.volumetrico-value').textContent = volTXT.toFixed(2) + ' kg';
                         rowSchenker.querySelector('.volumetrico-value').textContent = volSchenker.toFixed(2) + ' kg';
                     }
@@ -902,53 +787,17 @@
                 document.getElementById('volumetricoTXT').textContent = volumetricoTXTTotal.toFixed(2) + ' kg';
                 document.getElementById('volumetricoSchenker').textContent = volumetricoSchenkerTotal.toFixed(2) + ' kg';
                 
-                // Buscar tarifas si hay destino seleccionado
-                if (destino && allValid && tarifasData && zonasData) {
-                    const zonaTXT = buscarZona(destino, 'TXT');
-                    const zonaSchenker = buscarZona(destino, 'Schenker');
-                    
-                    const tarifaTXT = buscarTarifa('TXT', zonaTXT, volumetricoTXTTotal);
-                    const tarifaSchenker = buscarTarifa('Schenker', zonaSchenker, volumetricoSchenkerTotal);
-                    
-                    if (tarifaTXT !== null) {
-                        document.getElementById('precioTXT').textContent = tarifaTXT.toFixed(2) + ' €';
-                    } else {
-                        document.getElementById('precioTXT').textContent = '-- €';
-                    }
-                    
-                    if (tarifaSchenker !== null) {
-                        document.getElementById('precioSchenker').textContent = tarifaSchenker.toFixed(2) + ' €';
-                    } else {
-                        document.getElementById('precioSchenker').textContent = '-- €';
-                    }
-                    
-                    // Determinar mejor opción
-                    if (tarifaTXT !== null && tarifaSchenker !== null) {
-                        const summaryTXT = document.getElementById('summary-txt');
-                        const summarySchenker = document.getElementById('summary-schenker');
-                        
-                        summaryTXT.classList.remove('mejor');
-                        summarySchenker.classList.remove('mejor');
-                        
-                        let mejorAgencia, mejorPrecio, ahorro;
-                        
-                        if (tarifaTXT < tarifaSchenker) {
-                            summaryTXT.classList.add('mejor');
-                            mejorAgencia = 'TXT';
-                            mejorPrecio = tarifaTXT;
-                            ahorro = tarifaSchenker - tarifaTXT;
-                        } else {
-                            summarySchenker.classList.add('mejor');
-                            mejorAgencia = 'Schenker';
-                            mejorPrecio = tarifaSchenker;
-                            ahorro = tarifaTXT - tarifaSchenker;
-                        }
-                        
-                        document.getElementById('mejorAgencia').textContent = mejorAgencia;
-                        document.getElementById('mejorPrecio').textContent = mejorPrecio.toFixed(2) + ' €';
-                        document.getElementById('ahorroTotal').textContent = ahorro.toFixed(2) + ' €';
-                        document.getElementById('mejorOpcionDiv').style.display = 'block';
-                    }
+                // Marcar el mejor en el resumen
+                const summaryTXT = document.getElementById('summary-txt');
+                const summarySchenker = document.getElementById('summary-schenker');
+                
+                summaryTXT.classList.remove('mejor');
+                summarySchenker.classList.remove('mejor');
+                
+                if (volumetricoTXTTotal < volumetricoSchenkerTotal) {
+                    summaryTXT.classList.add('mejor');
+                } else if (volumetricoSchenkerTotal < volumetricoTXTTotal) {
+                    summarySchenker.classList.add('mejor');
                 }
             } else {
                 document.getElementById('summary').style.display = 'none';
@@ -956,6 +805,7 @@
             
             // Habilitar/deshabilitar botón enviar
             const numeroPedido = document.getElementById('numeroPedido').value.trim();
+            const destino = document.getElementById('destino').value;
             const submitBtn = document.getElementById('submitBtn');
             
             if (pallets.length > 0 && allValid && numeroPedido && destino) {
@@ -974,7 +824,7 @@
         document.getElementById('destino').addEventListener('change', updateSummary);
         
         // Enviar formulario
-        document.getElementById('pedidoForm').addEventListener('submit', async function(e) {
+        document.getElementById('pedidoForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const numeroPedido = document.getElementById('numeroPedido').value.trim();
@@ -1011,30 +861,6 @@
                 totalPallets += cantidad;
             });
             
-            // Buscar zonas y tarifas
-            const zonaTXT = buscarZona(destino, 'TXT');
-            const zonaSchenker = buscarZona(destino, 'Schenker');
-            
-            const tarifaTXT = buscarTarifa('TXT', zonaTXT, volumetricoTXTTotal);
-            const tarifaSchenker = buscarTarifa('Schenker', zonaSchenker, volumetricoSchenkerTotal);
-            
-            let agenciaRecomendada, costeFinal, ahorro;
-            
-            if (tarifaTXT !== null && tarifaSchenker !== null) {
-                if (tarifaTXT < tarifaSchenker) {
-                    agenciaRecomendada = 'TXT';
-                    costeFinal = tarifaTXT;
-                    ahorro = tarifaSchenker - tarifaTXT;
-                } else {
-                    agenciaRecomendada = 'Schenker';
-                    costeFinal = tarifaSchenker;
-                    ahorro = tarifaTXT - tarifaSchenker;
-                }
-            } else {
-                alert('No se pudieron calcular las tarifas. Verifica el destino y los datos.');
-                return;
-            }
-            
             const payload = {
                 numero_pedido: numeroPedido,
                 destino: destino,
@@ -1042,55 +868,47 @@
                 total_grupos: pallets.length,
                 volumetrico_txt: Math.round(volumetricoTXTTotal * 100) / 100,
                 volumetrico_schenker: Math.round(volumetricoSchenkerTotal * 100) / 100,
-                zona_txt: zonaTXT,
-                zona_schenker: zonaSchenker,
-                tarifa_txt: Math.round(tarifaTXT * 100) / 100,
-                tarifa_schenker: Math.round(tarifaSchenker * 100) / 100,
-                agencia_seleccionada: agenciaRecomendada,
-                coste_final: Math.round(costeFinal * 100) / 100,
-                ahorro: Math.round(ahorro * 100) / 100,
+                agencia_recomendada: volumetricoTXTTotal < volumetricoSchenkerTotal ? 'TXT' : 'Schenker',
+                diferencia_volumetrica: Math.abs(Math.round((volumetricoTXTTotal - volumetricoSchenkerTotal) * 100) / 100),
                 pallets: pallets,
                 timestamp: new Date().toISOString()
             };
             
             console.log('📦 Enviando a Make.com:', payload);
             
-            // ENVIAR A MAKE.COM
-            try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
-                
-                console.log('✅ Pedido enviado correctamente');
+            // Enviar a Make.com
+            fetch('https://hook.eu2.make.com/l6s81fqqdezb8b6bphamj9v4qq71ikex', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                console.log('✅ Respuesta de Make.com:', response);
                 showSuccess(payload);
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error('❌ Error:', error);
                 alert('Error al enviar el pedido. Por favor, inténtalo de nuevo.');
-            }
+            });
         });
         
         function showSuccess(data) {
             const modal = document.getElementById('successModal');
             const message = document.getElementById('successMessage');
             
+            const mejor = data.agencia_recomendada || 'TXT';
+            const volMejor = mejor === 'TXT' ? data.volumetrico_txt : data.volumetrico_schenker;
+            
             message.innerHTML = `
                 <strong>Pedido ${data.numero_pedido}</strong><br>
-                Destino: ${data.destino}<br>
                 ${data.total_pallets} pallets • ${data.total_grupos} grupos<br><br>
                 <div style="background: #d4edda; padding: 10px; border-radius: 8px; margin: 10px 0;">
-                    <strong>🚚 TXT:</strong> ${data.volumetrico_txt} kg → ${data.tarifa_txt} €<br>
-                    <strong>🚚 Schenker:</strong> ${data.volumetrico_schenker} kg → ${data.tarifa_schenker} €<br><br>
-                    ✅ <strong>Agencia seleccionada:</strong> ${data.agencia_seleccionada}<br>
-                    💰 <strong>Coste final:</strong> ${data.coste_final} €<br>
-                    📉 <strong>Ahorro:</strong> ${data.ahorro} €
+                    <strong>🚚 TXT:</strong> ${data.volumetrico_txt} kg<br>
+                    <strong>🚚 Schenker:</strong> ${data.volumetrico_schenker} kg<br><br>
+                    ✅ <strong>Mejor opción inicial:</strong> ${mejor} (${volMejor} kg)<br>
+                    <small>Diferencia: ${data.diferencia_volumetrica} kg</small>
                 </div>
-                El pedido ha sido registrado correctamente en el sistema.
+                El sistema cotizará con ambas agencias para confirmar la mejor tarifa.
             `;
             
             modal.style.display = 'flex';
@@ -1106,4 +924,4 @@
         }
     </script>
 </body>
-</html>
+</html>                                     
